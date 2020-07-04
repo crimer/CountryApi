@@ -18,8 +18,8 @@ namespace CountryApi.Models
         public string OfficialLanguage { get; set; }
         public string Capital { get; set; }
         public int Territory { get; set; }
-        public Population Population { get; set; }
-        public GDP GDP { get; set; }
+        public virtual Population Population { get; set; }
+        public virtual GDP GDP { get; set; }
         public double HDI { get; set; }
         public string Currency { get; set; }
         public CarTraffic CarTraffic { get; set; }
