@@ -39,7 +39,9 @@ namespace CountryApi.Services
 
         public Country GetCountryById(int id)
         {
-            return _context.Country.FirstOrDefault(c => c.Id == id);
+            return _context.Country
+                .Include(c => c.Population).Include(c => c.GDP)
+                .FirstOrDefault(c => c.Id == id);
         }
 
         public bool Save()
