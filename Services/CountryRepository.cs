@@ -27,9 +27,8 @@ namespace CountryApi.Services
             return await _context.Countries.CountAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(Country country)
         {
-            Country country = await GetCountryById(id);
             _context.Countries.Remove(country);
         }
 

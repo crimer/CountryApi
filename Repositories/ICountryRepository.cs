@@ -8,7 +8,7 @@ namespace CountryApi.Repositories
     {
         Task<Country> GetCountryById(int id);
         Task Add(Country country);
-        Task Delete(int id);
+        Task Delete(Country country);
         Task Update(Country newCountry);
         Task<IEnumerable<Country>> GetAll();
         Task<int> Count();

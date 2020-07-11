@@ -85,5 +85,19 @@ namespace CountryApi.Controllers.v1
             await _countryRepository.Save();
             return Ok(country);
         }
+
+        // DELETE api/countries/:id
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteCountry(int id)
+        {
+            var country = await _countryRepository.GetCountryById(id);
+            if(country == null)
+            {
+                return NotFound();
+            }
+            await _countryRepository.Delete(country);
+            await _countryRepository.Save();
+            return Ok();
+        }
     }
 }
