@@ -48,9 +48,9 @@ namespace CountryApi.Services
             return (_context.SaveChanges() >= 0);
         }
 
-        public async Task<Country> Update(int id, Country newCountry)
+        public async Task Update(Country newCountry)
         {
-            throw new NotImplementedException();
+            // nothing
         }
     }
 }

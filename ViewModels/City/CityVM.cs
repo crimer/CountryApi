@@ -1,7 +1,7 @@
 ﻿using CountryApi.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace CountryApi.ViewModels
+namespace CountryApi.ViewModel
 {
     public class CityVM
     {

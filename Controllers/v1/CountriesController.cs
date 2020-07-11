@@ -1,6 +1,8 @@
-﻿using CountryApi.Models;
+﻿using AutoMapper;
+using CountryApi.Models;
 using CountryApi.Repositories;
 using CountryApi.ViewModels;
+using CountryApi.ViewModels.Country;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -16,14 +18,16 @@ namespace CountryApi.Controllers.v1
     {
         private readonly ICountryRepository _countryRepository;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
 
-        public CountriesController(ICountryRepository countryRepository, ILoggerFactory loggerFactory)
+        public CountriesController(ICountryRepository countryRepository, ILoggerFactory loggerFactory, IMapper mapper)
         {
             _logger = loggerFactory.CreateLogger<CountriesController>();
             _countryRepository = countryRepository;
+            _mapper = mapper;
         }
 
-        // GET api/country
+        // GET api/countries
         [HttpGet(Name = nameof(GetAllCountries))]
         public async Task<IEnumerable<Country>> GetAllCountries()
         {
@@ -32,8 +36,7 @@ namespace CountryApi.Controllers.v1
             return countries;
         }
 
-
-        // GET api/country/:id
+        // GET api/countries/:id
         [HttpGet("{id:int}", Name = nameof(GetById))]
         public async Task<IActionResult> GetById(int id)
         {
@@ -42,9 +45,8 @@ namespace CountryApi.Controllers.v1
             {
                 return NotFound();
             }
-            return StatusCode(200, country);
+            return Ok(_mapper.Map<CountryVM>(country.Result));
         }
-
 
         // POST api/country
         [HttpPost(Name = nameof(AddCountry))]
@@ -56,26 +58,32 @@ namespace CountryApi.Controllers.v1
                     return BadRequest(ModelState);
                 if (countryVM == null)
                     return BadRequest();
-                Country country = new Country()
-                {
-                    Id = 2,
-                    Capital = countryVM.Capital,
-                    Currency = countryVM.Currency,
-                    FoundationDate = countryVM.FoundationDate,
-                    Name = countryVM.Name,
-                    OfficialLanguage = countryVM.OfficialLanguage,
-                    Territory = countryVM.Territory
-                };
-                await _countryRepository.Add(country);
+                var countryModel = _mapper.Map<Country>(countryVM);
+                await _countryRepository.Add(countryModel);
                 await _countryRepository.Save();
-                return Ok(country);
+                return CreatedAtRoute(nameof(AddCountry), countryModel);
             }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
                 return StatusCode(500, new { error = "Error in saving new Country" });
             }
-            
+
+        }
+
+        // PUT api/countries/:id
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> UpdateCountry(int id, [FromBody] CountryUpdateVM updateVM)
+        {
+            var country = await _countryRepository.GetCountryById(id);
+            if(country == null)
+            {
+                return NotFound();
+            }
+            _mapper.Map(updateVM, country);
+            await _countryRepository.Update(country);
+            await _countryRepository.Save();
+            return Ok(country);
         }
     }
 }

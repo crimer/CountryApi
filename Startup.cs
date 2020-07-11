@@ -1,3 +1,4 @@
+using AutoMapper;
 using CountryApi.Extentions;
 using CountryApi.Repositories;
 using CountryApi.Services;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json.Serialization;
 
 namespace CountryApi
@@ -39,6 +41,8 @@ namespace CountryApi
                 {
                     opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("CountryDB"));
             services.AddRouting(opt => opt.LowercaseUrls = true);
             services.AddSingleton<IMockData, MockData>();
