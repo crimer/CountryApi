@@ -9,19 +9,34 @@ namespace CountryApi.Services
     {
         public async Task Init(ApplicationDbContext dbContext)
         {
-            dbContext.Country.Add(new Country
+            dbContext.Countries.Add(new Country
             {
                 Id = 1,
                 Name = "Япония",
                 Capital = "Токио",
                 FoundationDate = DateTime.Now,
-                CarTraffic = CarTraffic.left,
+                CarTraffic = CarTraffic.Left,
                 Currency = "Японская иена",
                 HDI = 0.915,
                 OfficialLanguage = "Японский",
                 Territory = 377944,
-                GDP = new GDP() { Id = 1, Total = 5390, PerPerson = 42325 },
-                Population = new Population() { Id = 1, Size = 125900000, Value = 333.1 }
+                GdpTotal = 5390,
+                Population = 125900000
+
+            });
+            dbContext.Countries.Add(new Country
+            {
+                Id = 2,
+                Name = "Италия",
+                Capital = "Рим",
+                FoundationDate = DateTime.Now,
+                CarTraffic = CarTraffic.Right,
+                Currency = "Евро",
+                HDI = 0.883,
+                OfficialLanguage = "Итальянский",
+                Territory = 301340,
+                GdpTotal = 2.157,
+                Population = 60588366
 
             });
             

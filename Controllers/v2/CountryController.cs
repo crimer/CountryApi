@@ -16,7 +16,7 @@ namespace CountryApi.Controllers.v2
         /// </summary>
         /// <returns>An array of countries</returns>
         [HttpGet]
-        public ActionResult Get()
+        public IActionResult Get()
         {
             return Ok("Api Version => 2.0");
         }

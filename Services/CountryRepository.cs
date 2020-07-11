@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CountryApi.Services
 {
@@ -16,40 +17,38 @@ namespace CountryApi.Services
             _context = context;
         }
 
-        public void Add(Country country)
+        public async Task Add(Country country)
         {
-            _context.Country.Add(country);
+            await _context.Countries.AddAsync(country);
         }
 
-        public int Count()
+        public async Task<int> Count()
         {
-            return _context.Country.Count();
+            return await _context.Countries.CountAsync();
         }
 
-        public void Delete(int id)
+        public async Task Delete(int id)
         {
-            Country country = GetCountryById(id);
-            _context.Country.Remove(country);
+            Country country = await GetCountryById(id);
+            _context.Countries.Remove(country);
         }
 
-        public IEnumerable<Country> GetAll()
+        public async Task<IEnumerable<Country>> GetAll()
         {
-            return _context.Country.Include(c => c.Population).Include(c => c.GDP);
+            return await _context.Countries.ToListAsync();
         }
 
-        public Country GetCountryById(int id)
+        public async Task<Country> GetCountryById(int id)
         {
-            return _context.Country
-                .Include(c => c.Population).Include(c => c.GDP)
-                .FirstOrDefault(c => c.Id == id);
+            return await _context.Countries.FirstOrDefaultAsync(c => c.Id == id);
         }
 
-        public bool Save()
+        public async Task<bool> Save()
         {
             return (_context.SaveChanges() >= 0);
         }
 
-        public Country Update(int id, Country newCountry)
+        public async Task<Country> Update(int id, Country newCountry)
         {
             throw new NotImplementedException();
         }

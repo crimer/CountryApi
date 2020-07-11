@@ -1,16 +1,17 @@
 ﻿using CountryApi.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CountryApi.Repositories
 {
     public interface ICountryRepository
     {
-        Country GetCountryById(int id);
-        void Add(Country country);
-        void Delete(int id);
-        Country Update(int id, Country newCountry);
-        IEnumerable<Country> GetAll();
-        int Count();
-        bool Save();
+        Task<Country> GetCountryById(int id);
+        Task Add(Country country);
+        Task Delete(int id);
+        Task<Country> Update(int id, Country newCountry);
+        Task<IEnumerable<Country>> GetAll();
+        Task<int> Count();
+        Task<bool> Save();
     }
 }

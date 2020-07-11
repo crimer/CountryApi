@@ -10,7 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.VisualBasic;
+using System.Text.Json.Serialization;
 
 namespace CountryApi
 {
@@ -29,15 +29,23 @@ namespace CountryApi
             services.UseVersioning();
             services.UseSwagger();
 
-            services.AddControllers();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+            services.AddControllers(opt =>
+            {
+                opt.RespectBrowserAcceptHeader = true;
+            });
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
             services.AddDbContext<ApplicationDbContext>(opt => opt.UseInMemoryDatabase("CountryDB"));
             services.AddRouting(opt => opt.LowercaseUrls = true);
             services.AddSingleton<IMockData, MockData>();
             services.AddScoped<ICountryRepository, CountryRepository>();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, 
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
             IApiVersionDescriptionProvider apiVersion, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddFile("Log/log-{Date}.txt");
